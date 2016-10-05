@@ -1,0 +1,16 @@
+box: cuiunige/modeling-verification
+build:
+  steps:
+    - script:
+        name: "check"
+        code: |
+          luacheck src/
+    - script:
+        name: "test"
+        code: |
+          busted src/
+    - script:
+        name: "coverage"
+        code: |
+          luacov
+          colorize
