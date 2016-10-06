@@ -2,6 +2,10 @@ box: cuiunige/modeling-verification
 build:
   steps:
     - script:
+        name: "install"
+        code: |
+          luarocks install rockspec/fun-scm-1.rockspec
+    - script:
         name: "check"
         code: |
           luacheck src/

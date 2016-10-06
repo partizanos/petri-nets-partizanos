@@ -1,4 +1,5 @@
 local assert   = require "luassert"
+local Fun      = require "fun"
 local Petrinet = require "petrinet"
 
 describe ("Petri nets", function ()
@@ -26,12 +27,10 @@ describe ("Petri nets", function ()
     local petrinet = Petrinet.create ()
     petrinet.p     = petrinet:place  (5)
     petrinet.q     = petrinet:place  (0)
-    local result   = {}
-    for _, v in petrinet:places () do
-      result [#result+1] = v
-      assert.are.equal (getmetatable (v), Petrinet.Place)
-    end
-    assert.are.equal (#result, 2)
+    assert.is_truthy (Fun.all (function (place)
+      return getmetatable (place), Petrinet.Place
+    end, petrinet:places ()))
+    assert.are.equal (Fun.length (petrinet:places ()), 2)
   end)
 
   it ("can create a transition", function ()
@@ -63,12 +62,10 @@ describe ("Petri nets", function ()
       petrinet.q - 1,
       petrinet.p + 1,
     }
-    local result   = {}
-    for _, v in petrinet:transitions () do
-      result [#result+1] = v
-      assert.are.equal (getmetatable (v), Petrinet.Transition)
-    end
-    assert.are.equal (#result, 2)
+    assert.is_truthy (Fun.all (function (transition)
+      return getmetatable (transition), Petrinet.Transition
+    end, petrinet:transitions ()))
+    assert.are.equal (Fun.length (petrinet:transitions ()), 2)
   end)
 
   it ("can iterate over pre arcs", function ()
@@ -79,12 +76,10 @@ describe ("Petri nets", function ()
       petrinet.p - 1,
       petrinet.q + 1,
     }
-    local result   = {}
-    for _, v in petrinet.t:pre () do
-      result [#result+1] = v
-      assert.are.equal (getmetatable (v), Petrinet.Arc)
-    end
-    assert.are.equal (#result, 1)
+    assert.is_truthy (Fun.all (function (arc)
+      return getmetatable (arc), Petrinet.Arc
+    end, petrinet.t:pre ()))
+    assert.are.equal (Fun.length (petrinet.t:pre ()), 1)
   end)
 
   it ("can iterate over post arcs", function ()
@@ -95,12 +90,10 @@ describe ("Petri nets", function ()
       petrinet.p - 1,
       petrinet.q + 1,
     }
-    local result   = {}
-    for _, v in petrinet.t:post () do
-      result [#result+1] = v
-      assert.are.equal (getmetatable (v), Petrinet.Arc)
-    end
-    assert.are.equal (#result, 1)
+    assert.is_truthy (Fun.all (function (arc)
+      return getmetatable (arc), Petrinet.Arc
+    end, petrinet.t:post ()))
+    assert.are.equal (Fun.length (petrinet.t:post ()), 1)
   end)
 
 end)

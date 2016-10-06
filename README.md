@@ -7,10 +7,31 @@ at [University of Geneva](http://www.unige.ch).
 ## Environment
 
 Please install the [environment](https://github.com/cui-unige/modeling-verification).
+Install also an additional library but running in a terminal the command:
+
+```sh
+  luarocks install rockspec/fun-scm-1.rockspec
+```
 
 ## Subject
 
+You have to complete programs to compute, from a Place/Transition Petri net:
+* its reachability graph;
+* its coverability graph;
+* its place invariants;
+* its transition invariants.
 
+You must only implement parts shown by `FIXME` comments in the source code.
+Do **not** touch other algorithms.
+You are allowed to add extra functions if needed.
+
+At the beginning, you already have:
+* a representation for Petri nets (with tests);
+* a representation for their markings (with tests);
+* a representation for their states (with tests);
+* a parameterized algorithm to compute the reachability and coverability graphs;
+* a parameterized algorithm to compute place and transition invariants;
+* some Petri nets that can be used in tests.
 
 ## Rules
 

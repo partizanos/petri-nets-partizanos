@@ -1,3 +1,5 @@
+local Fun = require "fun"
+
 local Petrinet = {}
 
 Petrinet.Place      = {}
@@ -46,56 +48,46 @@ end
 function Petrinet.transition (petrinet, t)
   assert (getmetatable (petrinet) == Petrinet)
   assert (type (t) == "table")
-  local result = setmetatable ({}, Petrinet.Transition)
-  for k, v in pairs (t) do
-    assert (getmetatable (v) == Petrinet.Arc)
-    result [k] = v
-  end
-  return result
+  assert (Fun.all (function (_, arc)
+    return getmetatable (arc) == Petrinet.Arc
+  end, Fun.frommap (t)))
+  return setmetatable (Fun.tomap (Fun.frommap (t)), Petrinet.Transition)
 end
 
 function Petrinet.places (petrinet)
   assert (getmetatable (petrinet) == Petrinet)
-  return coroutine.wrap (function ()
-    for k, v in pairs (petrinet) do
-      if getmetatable (v) == Petrinet.Place then
-        coroutine.yield (k, v)
-      end
-    end
-  end)
+  return Fun.map (function (_, place)
+    return place
+  end, Fun.filter (function (_, place)
+    return getmetatable (place) == Petrinet.Place
+  end, Fun.frommap (petrinet)))
 end
 
 function Petrinet.transitions (petrinet)
   assert (getmetatable (petrinet) == Petrinet)
-  return coroutine.wrap (function ()
-    for k, v in pairs (petrinet) do
-      if getmetatable (v) == Petrinet.Transition then
-        coroutine.yield (k, v)
-      end
-    end
-  end)
+  return Fun.map (function (_, transition)
+    return transition
+  end, Fun.filter (function (_, transition)
+    return getmetatable (transition) == Petrinet.Transition
+  end, Fun.frommap (petrinet)))
 end
 
 function Petrinet.Transition.pre (transition)
   assert (getmetatable (transition) == Petrinet.Transition)
-  return coroutine.wrap (function ()
-    for k, v in pairs (transition) do
-      if getmetatable (v) == Petrinet.Arc and v.type == "pre" then
-        coroutine.yield (k, v)
-      end
-    end
-  end)
+  return Fun.map (function (_, arc)
+    return arc
+  end, Fun.filter (function (_, arc)
+    return getmetatable (arc) == Petrinet.Arc and arc.type == "pre"
+  end, Fun.frommap (transition)))
 end
 
 function Petrinet.Transition.post (transition)
   assert (getmetatable (transition) == Petrinet.Transition)
-  return coroutine.wrap (function ()
-    for k, v in pairs (transition) do
-      if getmetatable (v) == Petrinet.Arc and v.type == "post" then
-        coroutine.yield (k, v)
-      end
-    end
-  end)
+  return Fun.map (function (_, arc)
+    return arc
+  end, Fun.filter (function (_, arc)
+    return getmetatable (arc) == Petrinet.Arc and arc.type == "post"
+  end, Fun.frommap (transition)))
 end
 
 return Petrinet
