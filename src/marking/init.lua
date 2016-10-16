@@ -56,20 +56,8 @@ end
 function Marking.__lt (lhs, rhs)
   assert (getmetatable (lhs) == Marking)
   assert (getmetatable (rhs) == Marking)
-  return Fun.all (function (place, valuation)
-    local r = rhs [place]
-    if not r then
-      return false
-    elseif r == Marking.omega   and valuation == Marking.omega   then
-      return false
-    elseif r == Marking.omega   and type (valuation) == "number" then
-      return true
-    elseif type (r) == "number" and type (valuation) == "number" then
-      return valuation <= r
-    elseif type (r) == "number" and valuation == Marking.omega   then
-      return false
-    end
-  end, lhs) and lhs ~= rhs
+  return lhs ~= rhs
+     and lhs <= rhs
 end
 
 function Marking.__add (lhs, rhs)
